@@ -71,6 +71,7 @@ export function CopyButton({ value, label, className = "" }: CopyButtonProps) {
 
   const copied = status === "copied";
   const failed = status === "failed";
+  const copyTarget = label ?? value;
   const title = copied ? "Copied" : failed ? "Copy failed — select and copy manually" : "Copy";
 
   return (
@@ -78,7 +79,9 @@ export function CopyButton({ value, label, className = "" }: CopyButtonProps) {
       type="button"
       onClick={copy}
       title={title}
-      aria-label={copied ? "Copied" : failed ? "Copy failed" : `Copy ${label ?? value}`}
+      aria-label={
+        copied ? `${copyTarget} copied` : failed ? `Copy ${copyTarget} failed` : `Copy ${copyTarget}`
+      }
       className={`inline-flex items-center gap-1.5 transition-colors ${
         failed ? "text-red-400/70" : "text-base-100/50 hover:text-brand-400"
       } ${className}`}
@@ -102,6 +105,9 @@ export function CopyButton({ value, label, className = "" }: CopyButtonProps) {
           {copied ? "Copied" : failed ? "Failed" : label}
         </span>
       )}
+      <span className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+        {copied ? `${copyTarget} copied` : failed ? `Failed to copy ${copyTarget}` : ""}
+      </span>
     </button>
   );
 }
