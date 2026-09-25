@@ -109,6 +109,17 @@ describe("TransferPanel", () => {
     expect(screen.getByRole("button", { name: "Transfer" })).toBeDisabled();
   });
 
+  it("rejects an over-balance amount and states the available balance", () => {
+    setup();
+
+    fireEvent.change(screen.getByLabelText("Amount"), { target: { value: "101" } });
+
+    expect(
+      screen.getByText("Amount exceeds your available balance of 100 TOKEN."),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Transfer" })).toBeDisabled();
+  });
+
   it("surfaces a warning when the recipient is not KYC-approved", () => {
     setup();
 
