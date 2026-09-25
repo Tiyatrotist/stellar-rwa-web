@@ -124,16 +124,8 @@ describe("TransferPanel", () => {
   });
 
   it("blocks a self-transfer with a clear explanation", () => {
-    const run = jest.fn();
     setup();
-    mockUseTx.mockReturnValue({
-      phase: "idle",
-      hash: null,
-      error: null,
-      pending: false,
-      run,
-      reset: jest.fn(),
-    });
+    const tx = mockUseTx.mock.results[0].value;
 
     fireEvent.change(screen.getByLabelText("Recipient address"), {
       target: { value: SENDER },
@@ -144,7 +136,7 @@ describe("TransferPanel", () => {
     expect(screen.getByRole("alert")).toHaveTextContent(
       "You can't transfer to your own address.",
     );
-    expect(run).not.toHaveBeenCalled();
+    expect(tx.run).not.toHaveBeenCalled();
   });
 
   // ── Issue #231: decimals-aware inline validation ─────────────────────────
