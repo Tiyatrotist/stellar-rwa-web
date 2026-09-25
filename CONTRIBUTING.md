@@ -10,6 +10,7 @@ Thanks for helping improve Stellar RWA Web.
 
 ## Local setup
 
+- Use Node.js 20.x with npm 10.x. These versions match CI and the `engines` declared in `package.json`.
 - Copy [.env.example](.env.example) to `.env.local`.
 - The project currently targets Stellar Testnet. Mainnet contract IDs are intentionally empty in the example env file.
 - Install dependencies with `npm install` and start the app with `npm run dev`.
