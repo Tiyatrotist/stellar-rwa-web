@@ -123,6 +123,30 @@ describe("TransferPanel", () => {
     ).toBeInTheDocument();
   });
 
+  it("blocks a self-transfer with a clear explanation", () => {
+    const run = jest.fn();
+    setup();
+    mockUseTx.mockReturnValue({
+      phase: "idle",
+      hash: null,
+      error: null,
+      pending: false,
+      run,
+      reset: jest.fn(),
+    });
+
+    fireEvent.change(screen.getByLabelText("Recipient address"), {
+      target: { value: SENDER },
+    });
+    fireEvent.change(screen.getByLabelText("Amount"), { target: { value: "10" } });
+    fireEvent.click(screen.getByRole("button", { name: "Transfer" }));
+
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "You can't transfer to your own address.",
+    );
+    expect(run).not.toHaveBeenCalled();
+  });
+
   // ── Issue #231: decimals-aware inline validation ─────────────────────────
 
   describe("decimals-aware inline validation", () => {
