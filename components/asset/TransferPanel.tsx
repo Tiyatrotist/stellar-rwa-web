@@ -100,7 +100,9 @@ export function TransferPanel({ asset, balance, onTransferred }: TransferPanelPr
       return;
     }
     if (raw > balance) {
-      setFormError("Amount exceeds your balance.");
+      setFormError(
+        `Amount exceeds your available balance of ${formatTokenAmount(balance, metadata.decimals)} ${metadata.symbol}.`,
+      );
       return;
     }
 
@@ -204,8 +206,14 @@ export function TransferPanel({ asset, balance, onTransferred }: TransferPanelPr
                   setAmountError(null);
                 } else {
                   try {
-                    parseTokenAmount(val, metadata.decimals);
-                    setAmountError(null);
+                    const raw = parseTokenAmount(val, metadata.decimals);
+                    if (raw > balance) {
+                      setAmountError(
+                        `Amount exceeds your available balance of ${formatTokenAmount(balance, metadata.decimals)} ${metadata.symbol}.`,
+                      );
+                    } else {
+                      setAmountError(null);
+                    }
                   } catch (err) {
                     setAmountError(err instanceof Error ? err.message : null);
                   }
